@@ -1,0 +1,20 @@
+TITLE "blues" . not so original
+COMPOSER "sam the boss"
+STYLE "blues"
+MESURATION 4/4
+TONE "G"
+PROG "ABBA" .nice prog bro
+
+A/
+C7|C7|G7|F7|
+\A
+
+  
+
+
+   
+
+
+B/
+C7|C7|G7|F7|
+\B
