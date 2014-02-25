@@ -81,9 +81,23 @@ prog:
 	;
 
 theme_a:
-	THEME_A_START chords THEME_A_STOP
+	theme_a_start chords theme_a_stop
 	{
 		printf("\tREAD THEME\n");
+	}
+	;
+
+theme_a_start:
+	THEME_A_START
+	{
+		printf("\tTHEME A START\n");
+	}
+	;
+
+theme_a_stop:
+	THEME_A_STOP
+	{
+		printf("\tTHEME A STOP\n");
 	}
 	;
 
