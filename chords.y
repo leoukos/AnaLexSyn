@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "utils.h"
+
 #define YYSTYPE char *
 extern YYSTYPE yylval;
 
@@ -17,7 +19,9 @@ int yywrap()
 
 main()
 {
+	print_header();
 	yyparse();
+	print_footer();
 }
 %}
 
@@ -41,42 +45,60 @@ chords:
 title:
 	TITLE TEXT
 	{
-		printf("\tTITLE is %s\n", $2);
+		printf("\\begin{center}\n"
+				"\\textbf{{\\huge %s}}\n"
+				"\\end{center}\n\n",
+				$2);
 	}
 	;
 
 composer:
 	COMPOSER TEXT
 	{
-		printf("\tCOMPOSER is %s\n", $2);
+		printf("\\begin{center}\n"
+				"\\textbf{{\\large %s}}\n"
+				"\\end{center}\n\n",
+				$2);
 	}
 	;
 
 style:
 	STYLE TEXT
 	{
-		printf("\tSTYLE is %s\n", $2);
+		printf("\\begin{Large}\n"
+				"Style : %s\n"
+				"\\end{Large}\n\n",
+				$2);
 	}
 	;
 
 mesuration:
 	MESURATION MES
 	{
-		printf("\tMESURATION is %s\n", $2);
+		printf("\\begin{Large}\n"
+				"Mesuration : %s\n"
+				"\\end{Large}\n\n",
+				$2);
 	}
 	;
 
 tone:
 	TONE TONEVAL
 	{
-		printf("\tTONE is %s\n", $2);
+		printf("\\begin{Large}\n"
+				"Tone : %s\n"
+				"\\end{Large}\n\n",
+				$2);
 	}
 	;
 
 prog:
 	PROG PROGVAL
 	{
-		printf("\tPROG is %s\n", $2);
+		printf("\\begin{Large}\n"
+				"Progression : %s\n"
+				"\\end{Large}\n\n",
+				$2);
 	}
 	;
 

@@ -5,8 +5,8 @@ lexpart: chords.l
 yaccpart: chords.y
 	yacc -d chords.y
 
-gccpart: yaccpart lexpart
-	gcc y.tab.c lex.yy.c -o chords
+gccpart: yaccpart lexpart utils.c utils.h
+	gcc y.tab.c lex.yy.c utils.c -o chords
 
 execpart: a.out lex.yy.c chords.lex
 	./a.out < jeu_de_test.txt

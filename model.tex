@@ -1,0 +1,100 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[frenchb]{babel}
+\usepackage[T1]{fontenc}
+
+\usepackage{authblk}
+\usepackage{frbib}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage[all]{hypcap}
+\usepackage[labelseparator=endash]{caption}
+\usepackage[listofformat=parens]{subfig}
+\usepackage{graphicx, color}
+\usepackage{listings}
+\usepackage{float}
+\bibliographystyle{frplain}
+\hypersetup{colorlinks,%
+            citecolor=black,%
+            filecolor=black,%
+            linkcolor=black,%
+            urlcolor=blue}
+
+%%% CHORDS
+\newcommand{\chord}[2]{#1^{#2}}
+
+\newcommand{\LSTRESET}{
+  \lstset{
+    language=,
+    basicstyle=\color{black},
+    identifierstyle=\color{black}
+}
+}
+
+\begin{document}
+
+% TITLE
+\begin{center}
+\textbf{{\huge TITRE}}
+\end{center}
+
+% COMPOSER
+\begin{center}
+\textbf{{\large Composer}}
+\end{center}
+
+\begin{Large}
+%STYLE
+Style : Blues
+
+% MESURATION
+Mesuration : 4/4
+
+% TONE
+Tone : G
+
+% PROG
+Progression : ABBA\\
+\end{Large}
+
+
+% THEME A
+\begin{huge}
+\section*{A}
+\begin{tabular}{|c|c|c|c|}
+    \hline
+$\chord{C}{7}$  & $\chord{C}{7}$  & $\chord{C}{7}$  & $\chord{C}{7}$ \\
+    \hline
+$\chord{C}{7}$  & $\chord{C}{7}$  & $\chord{C}{7}$  & $\chord{C}{7}$ \\
+    \hline
+$\chord{C}{7}$  & $\chord{C}{7}$  & $\chord{C}{7}$  & $\chord{C}{7}$ \\
+    \hline
+$\chord{C}{7}$  & $\chord{C}{7}$  & $\chord{C}{7}$  & $\chord{C}{7}$ \\
+	\hline
+\end{tabular}
+\end{huge}
+
+
+% THEME B
+\begin{huge}
+\section*{B}
+\begin{tabular}{|c|c|c|c|}
+    \hline
+$\chord{C}{7}$  & $\chord{C}{7}$  & $\chord{C}{7}$  & $\chord{C}{7}$ \\
+    \hline
+$\chord{C}{7}$  & $\chord{C}{7}$  & $\chord{C}{7}$  & $\chord{C}{7}$ \\
+    \hline
+$\chord{C}{7}$  & $\chord{C}{7}$  & $\chord{C}{7}$  & $\chord{C}{7}$ \\
+    \hline
+$\chord{C}{7}$  & $\chord{C}{7}$  & $\chord{C}{7}$  & $\chord{C}{7}$ \\
+	\hline
+\end{tabular}
+\end{huge}
+
+\clearpage
+\end{document}
