@@ -19,6 +19,7 @@ int yywrap()
 
 main()
 {
+	int t;
 	print_header();
 	yyparse();
 	print_footer();
@@ -40,7 +41,7 @@ themes:
 	;
 
 chords:
-	|chords chord
+	|chords chord_line
 
 title:
 	TITLE TEXT
@@ -105,34 +106,59 @@ prog:
 theme_a:
 	theme_a_start chords theme_a_stop
 	{
-		printf("\tREAD THEME\n");
+		printf("\n\n");
 	}
 	;
 
 theme_a_start:
 	THEME_A_START
 	{
-		printf("\tTHEME A START\n");
+		printf("\\begin{huge}\n"
+					"\\section*{A}\n"
+					"\\begin{tabular}{|c|c|c|c|}\n"
+		    		"\\hline\n");
 	}
 	;
 
 theme_a_stop:
 	THEME_A_STOP
 	{
-		printf("\tTHEME A STOP\n");
+		printf("\\end{tabular}\n"
+					"\\end{huge}\n");
 	}
 	;
 
 theme_b:
-	THEME_B_START chords THEME_B_STOP
+	theme_b_start chords theme_b_stop
 	{
-		printf("\tREAD THEME B\n");
+		printf("\n\n");
 	}
 	;
 
-chord:
-	CHORD SEP
+theme_b_start:
+	THEME_B_START
 	{
-		printf("Just read a chord : %s\n", $1);
+		printf("\\begin{huge}\n"
+					"\\section*{B}\n"
+					"\\begin{tabular}{|c|c|c|c|}\n"
+		    		"\\hline\n");
+	}
+	;
+
+theme_b_stop:
+	THEME_B_STOP
+	{
+		printf("\\end{tabular}\n"
+					"\\end{huge}\n");
+	}
+	;
+
+chord_line:
+	CHORD SEP CHORD SEP CHORD SEP CHORD SEP
+	{
+		//printf("$\\{C}{7}$  & $\\chord{C}{7}$  & $\\chord{C}{7}$  & $\\chord{C}{7}$\\\\\n"
+		//			"\\hline\n");
+		printf("%s & %s & %s & %s \\\\\n"
+					"\\hline\n", $1, $3, $5, $7);
 	}
 	;
