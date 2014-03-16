@@ -32,8 +32,8 @@ main()
 
 %%
 
-header: /*empty*/
-	|title composer style mesuration tone prog  chords themes
+header: 
+	|title composer style mesuration tone prog  themes
 	;
 
 themes:
@@ -42,6 +42,7 @@ themes:
 
 chords:
 	|chords chord_line
+	;
 
 title:
 	TITLE TEXT
