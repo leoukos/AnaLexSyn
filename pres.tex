@@ -1,0 +1,176 @@
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[frenchb]{babel}
+\usepackage[T1]{fontenc}
+
+\usetheme{Singapore}
+
+\begin{document}
+\title{Analyse Lexicale et Syntaxique\\
+	   } 
+\author{Ken Déguernel - François Deslandes} 
+\date{\today} 
+
+\frame{\titlepage} 
+
+\frame{\frametitle{Table of contents}\tableofcontents} 
+
+
+\section{Présentation} 
+\begin{frame}
+\frametitle{Objectifs}
+L'objectif de ce projet est d'appliquer les outils étudiés lors du cours d'Analyse Lexicale et Syntaxique à un exemple concret.\\
+Le projet se décompose en deux parties :
+\begin{enumerate}
+\item Analyse Lexicale : comportant une partie de nettoyage et une partie de reconnaissance d'un texte. \\
+\item Analyse Syntaxique : consistant en une vérification de l'intégrité et de la cohérence du texte. \\
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Sujet}
+Nous souhaitons produire de manière automatique des fichiers de partitions de jazz en format pdf, à partir d'un fichier source en texte brut.\\
+Le fichier source comprend un certain nombre d'informations sur le morceau :
+\begin{itemize}
+\item Nom du morceau, auteur, style,
+\item Mesuration, tonalité,
+\item Thèmes (liste d'accords).
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Exemple}
+\begin{columns}
+
+\column{1.5in}
+\begin{tiny}
+\begin{verbatim}
+TITLE "Space Oddity" .Accompagnement guitare 
+COMPOSER "David Bowie"
+STYLE "Rock"
+MESURATION 4/4
+TONE "C"
+PROG "AAB"
+
+A/
+C|Emin|C|Emin|
+Amin|C|D7|D7|
+\A
+
+
+B/
+C|E7|F|Fmin|
+C|F|Fmin|F|
+Fmaj7|Emin7|Fmaj7|Emin7|
+Bb|Amin|G|F|
+\B
+\end{verbatim}
+\end{tiny}
+
+\column{1.5in}
+\begin{center}
+\textbf{Space Oddity}
+\end{center}
+\begin{small}
+\begin{center}
+\textbf{David Bowie}
+\end{center}
+
+
+Style : Rock
+
+Mesuration : 4/4
+
+Tone : C
+
+Progression : AAB
+\end{small}
+
+\textbf{A}
+\begin{small}
+\begin{tabular}{|c|c|c|c|}
+\hline
+C & Emin & C & Emin \\
+\hline
+Amin & C & D7 & D7 \\
+\hline
+\end{tabular}
+\end{small}
+
+\textbf{B}
+\begin{small}
+\begin{tabular}{|c|c|c|c|}
+\hline
+C & E7 & F & Fmin \\
+\hline
+C & F & Fmin & F \\
+\hline
+Fmaj7 & Emin7 & Fmaj7 & Emin7 \\
+\hline
+Bb & Amin & G & F \\
+\hline
+\end{tabular}
+\end{small}
+
+\end{columns}
+\end{frame}
+
+
+
+\section{Analyse lexicale}
+\begin{frame}
+\frametitle{Analyse lexicale}
+L'analyse lexicale consiste à :
+\begin{enumerate}
+\item Nettoyer le texte (commentaires, espacements surnuméraires, lignes vides,...),\\
+\item Repérer les informations du morceau (Titre, Compositeur,...),\\
+\item Reconnaitre les thèmes et les accords,\\
+\item Pouvoir reconnaitre du texte.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Reconnaitre les informations}
+\begin{tiny}
+\begin{verbatim}
+TITLE         {return TITLE;}
+COMPOSER      {return COMPOSER;}
+MESURATION    {return MESURATION;}
+TONE          {return TONE;}
+PROG          {return PROG;}
+STYLE         {return STYLE;}
+\end{verbatim}
+\end{tiny}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Reconnaitre les informations}
+Un accord est composé d'une basse (une note de A à G) et d'une nature (par exemple : mineure, majeure,...)
+\footnote{\tiny{La notation A-G est la notation américaine pour les notes do,ré,mi,...}\\}
+\begin{tiny}
+\begin{verbatim}
+NATURE      (Maj|min|sus4|alt|aug|6|7|9|11|13|b|#|o|-|\+)
+CHORD       ([A-G]{NATURE}*|%)
+MES         [0-9][/][0-9]
+TEXT        \"([a-z]|[ ])*\"
+PROG        \"[A-B]*\"
+TONEVAL     \"[A-G]\"
+\end{verbatim}
+\end{tiny}
+\end{frame}
+
+
+
+
+\section{Analyse syntaxique}
+\begin{frame}
+
+\end{frame}
+
+\section{Résultats}
+\begin{frame}
+
+\end{frame}
+
+\end{document}
