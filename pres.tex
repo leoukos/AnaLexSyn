@@ -125,13 +125,16 @@ L'analyse lexicale consiste à :
 \begin{enumerate}
 \item Nettoyer le texte (commentaires, espacements surnuméraires, lignes vides,...),\\
 \item Repérer les informations du morceau (Titre, Compositeur,...),\\
-\item Reconnaitre les thèmes et les accords,\\
-\item Pouvoir reconnaitre du texte.
+\item Reconnaître les thèmes et les accords,\\
+\item Pouvoir reconnaître du texte,
+\item Pouvoir retourner les valeurs lues.
 \end{enumerate}
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{Reconnaitre les informations}
+\frametitle{Reconnaître les informations}
+
+On repère les identificateur d'expressions et on retourne le token correspondant à l'analyseur syntaxique.
 \begin{tiny}
 \begin{verbatim}
 TITLE         {return TITLE;}
@@ -142,10 +145,20 @@ PROG          {return PROG;}
 STYLE         {return STYLE;}
 \end{verbatim}
 \end{tiny}
+
+On repère le texte entre guillemets et on le retourne dans la variables \textit{yylval}.
+\begin{tiny}
+\begin{verbatim}
+TEXT        \"([a-z]|[ ])*\"
+{TEXT}        {yylval=strndup(yytext+1, strlen(yytext)-2);return TEXT;}
+\end{verbatim}
+\end{tiny}
+
+
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{Reconnaitre les informations}
+\frametitle{Reconnaître les grilles d'accords}
 Un accord est composé d'une basse (une note de A à G) et d'une nature (par exemple : mineure, majeure,...)
 \footnote{\tiny{La notation A-G est la notation américaine pour les notes do,ré,mi,...}\\}
 \begin{tiny}
@@ -153,23 +166,190 @@ Un accord est composé d'une basse (une note de A à G) et d'une nature (par exe
 NATURE      (Maj|min|sus4|alt|aug|6|7|9|11|13|b|#|o|-|\+)
 CHORD       ([A-G]{NATURE}*|%)
 MES         [0-9][/][0-9]
-TEXT        \"([a-z]|[ ])*\"
 PROG        \"[A-B]*\"
 TONEVAL     \"[A-G]\"
 \end{verbatim}
 \end{tiny}
+
+Quand on reconnaît un accord, on le retourne à l'analyseur syntaxique dans \textit{yylval}.
+\begin{tiny}
+\begin{verbatim}
+{MES}             {yylval=strdup(yytext);return MES;}
+{PROG}            {yylval=strndup(yytext+1, strlen(yytext)-2);return PROGVAL;}
+{TONEVAL}         {yylval=strndup(yytext+1, strlen(yytext)-2);return TONEVAL;}
+{CHORD}           {yylval=strdup(yytext);return CHORD;}
+\end{verbatim}
+\end{tiny}
+
 \end{frame}
 
 
 
 
 \section{Analyse syntaxique}
-\begin{frame}
+\begin{frame}[fragile]
+\frametitle{Analyse syntaxique}
+L'analyse syntaxique du texte source consiste à repérer les différents éléments dans un ordre donné et avec une forme donnée.
+
+\begin{tiny}
+\begin{verbatim}
+header:
+	|title composer style mesuration tone prog  themes
+	;
+
+themes:
+	|theme_a theme_b
+	;
+
+chords:
+	|chords chord_line
+	;
+\end{verbatim}
+\end{tiny}
 
 \end{frame}
 
-\section{Résultats}
+
+
+\begin{frame}[fragile]
+\frametitle{Analyse syntaxique}
+On repère les informations grâce à leurs \textit{tokens} et on traduit en Latex. On utilise les valeurs retournées par l'analyseur lexical dans \textit{yylval}.
+
+\begin{columns}
+\column{1.5in}
+\begin{tiny}
+\begin{verbatim}
+title:
+	TITLE TEXT
+	{
+		printf("\\begin{center}\n"
+				"\\textbf{{\\huge %s}}\n"
+				"\\end{center}\n\n",
+				$2);
+	}
+	;
+\end{verbatim}
+\end{tiny}
+
+\column{1.5in}
+\begin{tiny}
+\begin{verbatim}
+theme_b:
+	theme_b_start chords theme_b_stop
+	{
+		printf("\n\n");
+	}
+	;
+theme_b_start:
+	THEME_B_START
+	{
+		printf("\\begin{huge}\n"
+					"\\section*{B}\n"
+					"\\begin{tabular}{|c|c|c|c|}\n"
+		    		"\\hline\n");
+	}
+	;
+chord_line:
+	CHORD SEP CHORD SEP CHORD SEP CHORD SEP
+	{
+		printf("%s & %s & %s & %s \\\\\n"
+					"\\hline\n", $1, $3, $5, $7);
+	}
+	;
+\end{verbatim}
+\end{tiny}
+
+\end{columns}
+\end{frame}
+
+\section{Mise en forme}
 \begin{frame}
+\frametitle{Mise en forme}
+L'intégration de la mise en forme Latex est assez simple.
+\begin{enumerate}
+\item Avant l'analyse du texte : Ecrire le header Latex {\small (begin document, packages, etc)}.
+\item Pendant l'analyse du texte : Ecrire les informations dans leur format Latex {\small (sections, titres, polices, etc)}.
+\item Après l'analyse du texte : Ecrire le footer Latex {\small (end document)}. 
+\end{enumerate}
+\end{frame}
+
+\section{Résultats}
+\begin{frame}[fragile]
+\frametitle{Résultats}
+
+\begin{columns}
+
+\column{1.5in}
+\begin{tiny}
+\begin{verbatim}
+TITLE "Space Oddity" .Accompagnement guitare 
+COMPOSER "David Bowie"
+STYLE "Rock"
+MESURATION 4/4
+TONE "C"
+PROG "AAB"
+
+A/
+C|Emin|C|Emin|
+Amin|C|D7|D7|
+\A
+
+
+B/
+C|E7|F|Fmin|
+C|F|Fmin|F|
+Fmaj7|Emin7|Fmaj7|Emin7|
+Bb|Amin|G|F|
+\B
+\end{verbatim}
+\end{tiny}
+
+\column{1.5in}
+\begin{center}
+\textbf{Space Oddity}
+\end{center}
+\begin{small}
+\begin{center}
+\textbf{David Bowie}
+\end{center}
+
+
+Style : Rock
+
+Mesuration : 4/4
+
+Tone : C
+
+Progression : AAB
+\end{small}
+
+\textbf{A}
+\begin{small}
+\begin{tabular}{|c|c|c|c|}
+\hline
+C & Emin & C & Emin \\
+\hline
+Amin & C & D7 & D7 \\
+\hline
+\end{tabular}
+\end{small}
+
+\textbf{B}
+\begin{small}
+\begin{tabular}{|c|c|c|c|}
+\hline
+C & E7 & F & Fmin \\
+\hline
+C & F & Fmin & F \\
+\hline
+Fmaj7 & Emin7 & Fmaj7 & Emin7 \\
+\hline
+Bb & Amin & G & F \\
+\hline
+\end{tabular}
+\end{small}
+
+\end{columns}
 
 \end{frame}
 
