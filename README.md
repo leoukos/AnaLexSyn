@@ -9,4 +9,4 @@ and generate the pdf automaticaly.
 
 * Some build will not work
 * In that case you will need to edit the "y.tab.h" file
-* Change thetype definition of from "int" to "char*"
+* Change the type definition of from "int" to "char*"
