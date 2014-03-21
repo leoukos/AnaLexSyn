@@ -1,4 +1,5 @@
 #! /bin/bash
+# Usage: $0 <source_file.txt>
 
 NAME=`basename -s ".txt" $1`
 
